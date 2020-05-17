@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+html(lang="es")
+	head
+		include partials/header
+	body(class="login")
+		.contenedor-formulario
+			h1 Crea tu cuenta
+			//- muestro errores en la validacion de los campos
+			if locals.mensajes
+				.alertas
+					each categoria in Object.keys(locals.mensajes)
+						each error in mensajes[categoria]
+							div(class=`alerta ${categoria}`)
+								p= error
+			form(id="formulario" class="caja caja-login" method="post" 
+			     action="/crear-cuenta")
+				.campo
+					label(for="email") Email:
+					input(type="email" name="email" placeholder="Tu email" 
+					      required value=email)
+				.campo
+					label(for="password") Contraseña:
+					input(type="password" name="password" 
+					      placeholder="Tu contraseña" required 
+					      value=password)
+				.campo.enviar
+					input(type="submit" class="boton" value="Crear cuenta")
+				.campo
+					a(href="/iniciar-sesion") Iniciar sesión
