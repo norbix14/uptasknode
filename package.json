@@ -16,33 +16,33 @@
   "author": "Juan Pablo de la Torre (Udemy)",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
-    "concurrently": "^5.2.0",
+    "axios": "^0.20.0",
+    "bcrypt": "^5.0.0",
+    "concurrently": "^5.3.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "express-validator": "^6.4.0",
+    "express-validator": "^6.6.1",
     "html-to-text": "^5.1.1",
-    "juice": "^6.0.0",
+    "juice": "^7.0.0",
     "mysql2": "^2.1.0",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.4",
-    "sequelize": "^5.21.7",
+    "pug": "^3.0.0",
+    "sequelize": "^6.3.4",
     "shortid": "^2.2.15",
-    "slug": "^2.1.1",
-    "sweetalert2": "^9.10.12"
+    "slug": "^3.3.4",
+    "sweetalert2": "^9.17.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/core": "^7.11.4",
+    "@babel/preset-env": "^7.11.0",
     "babel-loader": "^8.1.0",
-    "nodemon": "^2.0.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "nodemon": "^2.0.4",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }
