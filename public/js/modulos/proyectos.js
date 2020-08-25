@@ -1,9 +1,7 @@
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { Toast } from '../funciones/toast'
 
- /**
-  * seleccionar el boton para eliminar un proyecto usando axios
- */
 const btnEliminar = document.querySelector('#eliminar-proyecto')
 if(btnEliminar) {
 	btnEliminar.addEventListener('click', e => {
@@ -19,7 +17,7 @@ if(btnEliminar) {
 			cancelButtonText: 'No, cancelar'
 		})
 		.then(resultado => {
-			if (resultado.value) {
+			if(resultado.value) {
 				const url = `${location.origin}/proyectos/${urlProyecto}`
 				axios.delete(url, {
 					params: {
@@ -27,24 +25,10 @@ if(btnEliminar) {
 					}
 				})
 				.then(respuesta => {
-					const Toast = Swal.mixin({
-						toast: true,
-						position: 'top-end',
-						showConfirmButton: false,
-						timer: 2250,
-						timerProgressBar: true,
-						onOpen: (toast) => {
-							toast.addEventListener('mouseenter', Swal.stopTimer)
-							toast.addEventListener('mouseleave', Swal.resumeTimer)
-						}
-					})
-					Toast.fire({
-						icon: 'success',
-						title: respuesta.data
-					})
+					Toast('success', respuesta.data)
 					setTimeout(() => window.location.href = '/', 2500)
 				})
-				.catch(() => {
+				.catch(err => {
 					Swal.fire('Error', 'Ha ocurrido un error', 'error')
 				})
 			}
