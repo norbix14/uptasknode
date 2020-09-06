@@ -1,25 +1,27 @@
-## Proyecto Uptask
+## Proyecto [Uptask](https://stormy-shore-59209.herokuapp.com/iniciar-sesion)
 
-Proyecto de creación de proyectos y tareas <br />
+Creación de proyectos y tareas para cada proyecto
 
-## Comandos
+### En la rama `master` el código es tal cual al curso
 
-### `git clone <repo>`
+### En la rama `dev` el codigo presenta modificaciones
+
+### El proyecto fue desplegado usando el código de la rama `master`
+
+## Pasos
 
 Clonar este repositorio
 
-### `npm i`
+### `git clone <repository> --branch <master/dev> <directory>`
 
 Instalar las dependencias necesarias
 
-### `npm run desarrollo`
+### `npm i`
 
 Ejecuta la aplicación en modo de desarrollo
 
+### `npm run desarrollo`
+
 ## Elementos necesarios
 
-Base de datos en MySql y cuenta en MailTrap <br />
-
-Esto es si se quiere enviar email en modo de desarrollo <br />
-
-Todo esto mediante las variables de entorno <br />
+Base de datos en MySql y cuenta en MailTrap para confirmación del email
