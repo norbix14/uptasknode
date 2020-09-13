@@ -1,26 +1,30 @@
-## Proyecto [Uptask](https://stormy-shore-59209.herokuapp.com/iniciar-sesion)
+# Proyecto [Uptask](https://stormy-shore-59209.herokuapp.com/iniciar-sesion)
 
 Creación de proyectos y tareas para cada proyecto
 
-### En la rama `master` el código es tal cual al curso
+## Snapshots
 
-### En la rama `dev` el codigo presenta modificaciones
+![Iniciar sesion](/snapshots/login.png "Iniciar sesión")
 
-### El proyecto fue desplegado usando el código de la rama `master`
+![Dashboard](/snapshots/admin.png "Panel principal")
+
+![Nuevo proyecto](/snapshots/nuevo-proyecto.png "Nuevo proyecto")
+
+![Tareas de un proyecto](/snapshots/tareas-proyecto.png "Tareas de un proyecto")
 
 ## Pasos
 
 Clonar este repositorio
 
-### `git clone <repository> --branch <master/dev> <directory>`
+**`git clone <repository> --branch <master> <directory>`**
 
 Instalar las dependencias necesarias
 
-### `npm i`
+**`npm i`**
 
-Ejecuta la aplicación en modo de desarrollo
+Ejecutar [App](http://localhost:3000) en modo de desarrollo
 
-### `npm run desarrollo`
+**`npm run desarrollo`**
 
 ## Elementos necesarios
 
