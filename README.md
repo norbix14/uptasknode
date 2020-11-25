@@ -1,4 +1,4 @@
-# Proyecto [Uptask](https://stormy-shore-59209.herokuapp.com/iniciar-sesion)
+# Proyecto Uptask
 
 Creación de proyectos y tareas para cada proyecto
 
@@ -28,4 +28,32 @@ Ejecutar [App](http://localhost:3000) en modo de desarrollo
 
 ## Elementos necesarios
 
-Base de datos en MySql y cuenta en MailTrap para confirmación del email
+**Variables de entornos**
+
+### Configuraciones de la base de datos en Mysql
+
+		BD_NOMBRE=""
+		BD_USER=""
+		BD_PASS=""
+		BD_HOST="
+		BD_PORT=""
+
+### Host local para el proyecto
+
+		HOST=""
+
+### Configuraciones de la cuenta de Mailtrap
+
+		MAIL_USER=""
+		MAIL_PASSWORD=""
+		MAIL_HOST=""
+		MAIL_PORT=""
+
+### Sesion
+
+		SESSION=""
+
+
+**Base de datos en ``MySql``**
+
+**Cuenta en ``MailTrap`` para confirmación del email si se desea la funcionalidad**
