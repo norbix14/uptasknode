@@ -2,6 +2,12 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const Usuarios = require('../models/Usuarios')
 
+/**
+ * Modulo para configurar la autenticacion
+ * 
+ * @module config/passport
+*/
+
 passport.use(new LocalStrategy(
 	{
 		usernameField: 'email',

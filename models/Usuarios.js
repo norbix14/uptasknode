@@ -1,7 +1,16 @@
 const Sequelize = require('sequelize')
 const db = require('../config/db')
 const Proyectos = require('../models/Proyectos')
-const bcrypt = require('bcrypt')
+const {
+	encryptPassword,
+	comparePassword
+} = require('../helpers/passwordHandler')
+
+/**
+ * Modulo que contiene el modelo de los Usuarios
+ *
+ * @module models/Proyectos
+*/
 
 const Usuarios = db.define('usuarios',
 	{
@@ -37,7 +46,7 @@ const Usuarios = db.define('usuarios',
 		},
 		activo: {
 			type: Sequelize.INTEGER(1),
-			defaultValue: 0
+			defaultValue: 1
 		},
 		token: {
 			type: Sequelize.STRING(255)
@@ -49,14 +58,20 @@ const Usuarios = db.define('usuarios',
 	{
 		hooks: {
 			beforeCreate(usuario) {
-				usuario.password = bcrypt.hashSync(usuario.password, bcrypt.genSaltSync(10))
+				usuario.password = encryptPassword(usuario.password)
 			}
 		}
 	}
 )
 
+/**
+ * Funcion que verifica la contraseña
+ * 
+ * @param {string} password - string to veriify
+ * @returns {boolean} true or false
+*/
 Usuarios.prototype.verificarPassword = function(password) {
-	return bcrypt.compareSync(password, this.password)
+	return comparePassword(password, this.password)
 }
 
 Usuarios.hasMany(Proyectos)

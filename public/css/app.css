@@ -60,12 +60,11 @@ body {
 .campo input[type="text"],
 .campo input[type="password"] {
   height: 3rem;
-  /* border: 0; */
   flex: 1;
   border: 1px solid #455A64;
   border-radius: 0.5rem;
   padding-left: 2rem;
-  color: black;
+  color: #000;
 }
 .campo.acciones {
   justify-content: space-between;
@@ -93,16 +92,15 @@ body {
 }
 .boton:hover {
   cursor: pointer;
-  background-color: rgb(219, 184, 29)!important;
+  background-color: rgb(219, 184, 29);
 }
 .boton.eliminar {
   margin-top: 1rem;
-  float: right;
-  background-color: red!important;
+  background-color: red;
   color: #fff;
 }
 .campo a {
-  color: black;
+  color: #000;
   text-decoration: none;
 }
 
@@ -230,7 +228,7 @@ body.index {
 .listado-pendientes ul li i {
   cursor: pointer;
 }
-.acciones i:last-child{
+.acciones i:last-child {
   margin-left: 3rem;
 }
 .completo {
@@ -244,16 +242,16 @@ body.index {
   margin: 0 auto 1rem auto;
 }
 .error {
-  background-color: rgba(255, 201, 201, 0.5);
+  background-color: rgba(248, 110, 110, 0.5);
 }
 .error p {
-  color: #f00;
+  color: #111;
 }
 .correcto {
-  background-color: rgba(201, 245, 201, 0.5);
+  background-color: rgba(74, 241, 74, 0.5);
 }
 .correcto p {
-  color: #3f0;
+  color: #111;
 }
 
 /** Linea de Avance **/
@@ -299,20 +297,20 @@ form.agregar-proyecto label {
   text-align: right;
   padding-right: 1rem;
 }
-form.agregar-proyecto input[type="text"]{
+form.agregar-proyecto input[type="text"] {
   width: 100%;
   height: 3rem;
   padding-left: 1rem;
   border: 1px solid #455A64;
-  border-radius: 5rem;
-  color: black;
+  /* border-radius: 5rem; */
+  color: #000;
 }
-form input[type="submit"]{
+form input[type="submit"] {
   margin-top: 1rem;
   text-align: center;
   display: block;
   padding: 1.5rem;
-  color: black;
+  color: #000;
   width: auto;
   margin: 0;
 }
@@ -325,8 +323,8 @@ form input[type="submit"]{
   display: flex;
   justify-content: space-between;
 }
-.contenedor-acciones .boton:first-of-type{
-  color: black;
+.contenedor-acciones .boton:first-of-type {
+  color: #000;
   text-decoration: none;
 }
 .contenedor-acciones .boton.eliminar {
@@ -336,4 +334,16 @@ form input[type="submit"]{
   margin: 0;
   text-align: center;
   display: block;
+}
+
+/** 404 **/
+.notfound {
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem auto 0 auto;
+}
+.deverror {
+  padding: 1rem;
+  background-color: #ddd;
+  margin: 1rem auto 0 auto;
 }

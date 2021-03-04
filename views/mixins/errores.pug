@@ -1,7 +1,7 @@
-mixin mostrarErrores(locals = {})
-	if locals.mensajes
+mixin mostrarErrores(errors = {})
+	if errors.mensajes
 	  .alertas
-      each categoria in Object.keys(locals.mensajes)
+      each categoria in Object.keys(errors.mensajes)
         each error in mensajes[categoria]
           div(class=`alerta ${categoria}`)
             p= error

@@ -1,34 +1,51 @@
 const nodemailer = require('nodemailer')
 const pug = require('pug')
 const juice = require('juice')
-const htmlToText = require('html-to-text')
+const { htmlToText } = require('html-to-text')
 const util = require('util')
 const emailConfig = require('../config/email')
 
+const { host, port, user, pass } = emailConfig
+
 let transport = nodemailer.createTransport({
-	host: emailConfig.host,
-	port: emailConfig.port,
+	host,
+	port,
 	auth: {
-		user: emailConfig.user,
-		pass: emailConfig.pass
+		user,
+		pass
 	}
 })
 
-const generarHtml = (archivo, opciones = {}) => {
-	const html = pug.renderFile(`${__dirname}/../views/emails/${archivo}.pug`, opciones)
+/**
+ * Funcion que genera HTML
+ * 
+ * @param {string} file - name of the file to render
+ * @param {object} opts - configuration object
+*/
+const genHtml = (file, opts = {}) => {
+	const html = pug.renderFile(`${__dirname}/../views/emails/${file}.pug`, opts)
 	return juice(html)
 }
 
-exports.enviar = async opciones => {
-	const html = generarHtml(opciones.archivo, opciones)
-	const text = htmlToText.fromString(html)
-	let opcionesEmail = {
+/**
+ * Funcion para enviar un mail
+ * 
+ * @param {object} opts - a configuration object to send emails
+ * @param {string} opts.archivo - file to render
+ * @param {object} opts.usuario - user data
+ * @param {string} opts.subject - mail subject
+ * @param {string} opts.resetUrl - url to redirect
+*/
+exports.enviar = async opts => {
+	const html = genHtml(opts.archivo, opts)
+	const text = htmlToText(html)
+	const mailOpts = {
 		from: 'UptaskNode <no-reply@uptasknode.com>',
-		to: opciones.usuario.email,
-		subject: opciones.subject,
+		to: opts.usuario.email,
+		subject: opts.subject,
 		text,
 		html
 	}
-	const enviarEmail = util.promisify(transport.sendMail, transport)
-	return enviarEmail.call(transport, opcionesEmail)
+	const sendMail = util.promisify(transport.sendMail, transport)
+	return sendMail.call(transport, mailOpts)
 }

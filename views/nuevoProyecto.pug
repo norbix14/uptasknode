@@ -1,5 +1,4 @@
 extends layout
-include mixins/crearProyecto
 block contenido
 	.contenido-principal
 		h1 #{nombrePagina}
@@ -7,4 +6,5 @@ block contenido
 			each error in errores
 				.alerta.error
 					p= error.texto
+		include mixins/crearProyecto
 		+crearProyecto(proyecto)

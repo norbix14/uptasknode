@@ -6,6 +6,12 @@ const tareasController = require('../controllers/tareasController')
 const usuariosController = require('../controllers/usuariosController')
 const authController = require('../controllers/authController')
 
+/**
+ * Modulo que contiene el enrutamiento de la aplicacion
+ * 
+ * @module routes/index
+*/
+
 module.exports = function() {
 	/**** Rutas para los proyectos ****/
 	// obtener todos los proyectos creados
@@ -79,9 +85,9 @@ module.exports = function() {
 	router.post('/crear-cuenta',
 		usuariosController.crearCuenta
 	)
-	router.get('/confirmar/:correo',
+	/*router.get('/confirmar/:correo',
 		usuariosController.confirmarCuenta
-	)
+	)*/
 
 	// iniciar sesion
 	router.get('/iniciar-sesion',
@@ -97,6 +103,7 @@ module.exports = function() {
 	)
 
 	// reestablecer contraseña
+	/*
 	router.get('/reestablecer', 
 		usuariosController.formReestablecerPassword
 	)
@@ -109,6 +116,7 @@ module.exports = function() {
 	router.post('/reestablecer/:token',
 		authController.actualizarPassword
 	)
+	*/
 
 	return router
 }

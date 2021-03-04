@@ -1,3 +1,8 @@
 /node_modules
 variables.env
+.env
+.env.local
+.env.development
+.env.production
+
 .DS_Store

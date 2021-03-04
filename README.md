@@ -6,6 +6,8 @@ Creación de proyectos y tareas para cada proyecto
 
 ![Iniciar sesion](/snapshots/login.png "Iniciar sesión")
 
+![Crear cuenta](/snapshots/createaccount.png "Crear cuenta")
+
 ![Dashboard](/snapshots/admin.png "Panel principal")
 
 ![Nuevo proyecto](/snapshots/nuevo-proyecto.png "Nuevo proyecto")
@@ -14,23 +16,24 @@ Creación de proyectos y tareas para cada proyecto
 
 ## Pasos
 
-Clonar este repositorio
+Clonar repositorio
 
-**`git clone <repository> --branch <master> <directory>`**
+		git clone <repository>
 
 Instalar las dependencias necesarias
 
-**`npm i`**
+		npm i
 
-Ejecutar [App](http://localhost:3000) en modo de desarrollo
+Ejecutar la App en modo de desarrollo/produccion
 
-**`npm run desarrollo`**
+		npm run development
+		npm run production
 
 ## Elementos necesarios
 
-**Variables de entornos**
+**Variables de entorno**
 
-### Configuraciones de la base de datos en Mysql
+Para la base de datos en **Mysql**
 
 		BD_NOMBRE=""
 		BD_USER=""
@@ -38,22 +41,10 @@ Ejecutar [App](http://localhost:3000) en modo de desarrollo
 		BD_HOST="
 		BD_PORT=""
 
-### Host local para el proyecto
+Host local para el proyecto
 
 		HOST=""
 
-### Configuraciones de la cuenta de Mailtrap
-
-		MAIL_USER=""
-		MAIL_PASSWORD=""
-		MAIL_HOST=""
-		MAIL_PORT=""
-
-### Sesion
+Sesion
 
 		SESSION=""
-
-
-**Base de datos en ``MySql``**
-
-**Cuenta en ``MailTrap`` para confirmación del email si se desea la funcionalidad**

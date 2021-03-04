@@ -1,4 +1,12 @@
-require('dotenv').config({ path: 'variables.env' })
+require('dotenv').config()
+
+/**
+ * Modulo que exporta un objeto con datos
+ * de la base de datos como su nombre,
+ * puerto, host, dialecto, usuario y contraseña
+ * 
+ * @module config/UptaskInfoDB
+*/
 
 module.exports = {
 	database: process.env.BD_NOMBRE,

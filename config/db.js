@@ -2,6 +2,12 @@ const Sequelize = require('sequelize')
 const UptaskInfoDB = require('./UptaskInfoDB')
 const { database, user, password, host, dialect, port } = UptaskInfoDB
 
+/**
+ * Modulo para configurar la base de datos
+ * 
+ * @module config/db
+*/
+
 const db = new Sequelize(database, user, password, {
   host,
   dialect,

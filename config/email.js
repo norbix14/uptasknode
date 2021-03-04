@@ -1,4 +1,11 @@
-require('dotenv').config({ path: 'variables.env' })
+require('dotenv').config()
+
+/**
+ * Modulo para configurar las opciones del mail
+ * para validar y confirmar la cuenta
+ * 
+ * @module config/email
+*/
 
 module.exports = {
 	user: process.env.MAIL_USER,
