@@ -1,0 +1,6 @@
+/node_modules
+/public
+/views
+variables.env
+.env
+.DS_Store

@@ -1,61 +1,51 @@
 const nodemailer = require('nodemailer')
 const pug = require('pug')
 const juice = require('juice')
-const htmlToText = require('html-to-text')
+const { htmlToText } = require('html-to-text')
 const util = require('util')
 const emailConfig = require('../config/email')
 
-/**
- * crear transporte para los emails con 'host',
- * 'port', 'user' y 'pass' obtenidos de la cuenta
- * gratuita de Mailtrap
-*/
+const { host, port, user, pass } = emailConfig
+
 let transport = nodemailer.createTransport({
-	host: emailConfig.host,
-	port: emailConfig.port,
+	host,
+	port,
 	auth: {
-		user: emailConfig.user,
-		pass: emailConfig.pass
+		user,
+		pass
 	}
 })
 
-
 /**
- * @param archivo es la plantilla usada para mostrar en el email enviado
- * @param opciones objecto con datos con los cuales Pug trabajara
- * @return compila la plantilla Pug proporcionada a una cadena HTML
+ * Funcion que genera HTML
+ * 
+ * @param {string} file - name of the file to render
+ * @param {object} opts - configuration object
 */
-const generarHtml = (archivo, opciones = {}) => {
-	const html = pug.renderFile(`${__dirname}/../views/emails/${archivo}.pug`,
-	                            opciones)
+const genHtml = (file, opts = {}) => {
+	const html = pug.renderFile(`${__dirname}/../views/emails/${file}.pug`, opts)
 	return juice(html)
 }
 
-
 /**
- * @param opciones objecto con los datos del usuario a quien enviar el
- * email como 'email', 'subject' o motivo, 'text' texto con informacion
- * sobre los pasos a seguir o algun token y 'plantilla/html' que se 
- * usara para dar formato a los datos proporcionados
- * @return envia el email con los datos proporcionados
+ * Funcion para enviar un mail
+ * 
+ * @param {object} opts - a configuration object to send emails
+ * @param {string} opts.archivo - file to render
+ * @param {object} opts.usuario - user data
+ * @param {string} opts.subject - mail subject
+ * @param {string} opts.resetUrl - url to redirect
 */
-exports.enviar = async opciones => {
-	const html = generarHtml(opciones.archivo, opciones)
-	const text = htmlToText.fromString(html)
-	/**
-	 * objeto con los parametros que son pasados a 'enviar' para
-	 * poder enviar el email, tales como 'from', 'to', 'subject', 'text'
-	 * y 'html' o plantilla que sera compilada para dar formato al email
-	*/
-	let opcionesEmail = {
+exports.enviar = async opts => {
+	const html = genHtml(opts.archivo, opts)
+	const text = htmlToText(html)
+	const mailOpts = {
 		from: 'UptaskNode <no-reply@uptasknode.com>',
-		to: opciones.usuario.email,
-		subject: opciones.subject,
+		to: opts.usuario.email,
+		subject: opts.subject,
 		text,
 		html
 	}
-	const enviarEmail = util.promisify(transport.sendMail, transport)
-	return enviarEmail.call(transport, opcionesEmail)
+	const sendMail = util.promisify(transport.sendMail, transport)
+	return sendMail.call(transport, mailOpts)
 }
-
-

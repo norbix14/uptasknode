@@ -2,29 +2,7 @@
 html(lang="es")
 	head
 		include partials/header
-	body(class="login")
+	body.login
 		.contenedor-formulario
-			h1 Iniciar sesión
-			//- muestro errores en la validacion de los campos
-			if locals.mensajes
-				.alertas
-					each categoria in Object.keys(locals.mensajes)
-						each error in mensajes[categoria]
-							div(class=`alerta ${categoria}`)
-								p= error
-			form(id="formulario" class="caja caja-login" method="post" 
-			     action="/iniciar-sesion")
-				.campo
-					label(for="email") Email:
-					input(type="email" name="email" placeholder="Tu email" 
-					      required value=email)
-				.campo
-					label(for="password") Contraseña:
-					input(type="password" name="password" 
-					      placeholder="Tu contraseña" required 
-					      value=password)
-				.campo.enviar
-					input(type="submit" class="boton" value="Iniciar sesión")
-				.campo.acciones
-					a(href="/crear-cuenta") ¿Aún no tienes cuenta? Registrate
-					a(href="/reestablecer") ¿Olvidaste la contraseña?
+			include mixins/form
+			+form('login', locals)

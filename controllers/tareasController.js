@@ -1,82 +1,82 @@
 const Proyectos = require('../models/Proyectos')
 const Tareas = require('../models/Tareas')
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
+ * Funcion para agregar una tarea
  * 
- * agregar la tarea en la base de datos
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {object} next - next function
 */
 exports.agregarTarea = async (req, res, next) => {
-	// obtener proyecto actual
-	const proyecto = await Proyectos.findOne({
-		where: {
-			url: req.params.url
-		}
-	})
-	// leer valor del input
-	const { tarea } = req.body
-	// estado incompleto por defecto
-	const estado = 0
-	// id del proyecto al que pertenece
-	const proyectoId = proyecto.id
-	// insertar en bbdd
-	const resultado = await Tareas.create({
-		tarea,
-		estado,
-		proyectoId
-	})
-	if(!resultado) next()
-	// redireccionar
-	res.redirect(`/proyectos/${req.params.url}`)
+	try {
+		const { url } = req.params
+		const proyecto = await Proyectos.findOne({
+			where: {
+				url
+			}
+		})
+		const { tarea } = req.body
+		const estado = 0
+		const proyectoId = proyecto.id
+		const resultado = await Tareas.create({
+			tarea,
+			estado,
+			proyectoId
+		})
+		if (!resultado) next()
+		return res.redirect(`/proyectos/${url}`)
+	} catch (err) {
+		return res.redirect(`/`)
+	}
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
+ * Funcion para cambiar el estado de una tarea
  * 
- * actualizar el estado de la tarea en la 
- * base de datos
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {object} next - next function
 */
 exports.cambiarEstadoTarea = async (req, res, next) => {
-	const { id } = req.params
-	const tarea = await Tareas.findOne({
-		where: {
-			id
+	try {
+		const { id } = req.params
+		const tarea = await Tareas.findOne({
+			where: {
+				id
+			}
+		})
+		let estado = 0
+		if (tarea.estado === estado) {
+			estado = 1
 		}
-	})
-	// cambiar estado
-	let estado = 0
-	if(tarea.estado === estado) {
-		estado = 1
+		tarea.estado = estado
+		const resultado = await tarea.save()
+		if (!resultado) next()
+		return res.status(200).send('Estado actualizado correctamente')
+	} catch (err) {
+		return res.status(500).send('Ha ocurrido un error')
 	}
-	tarea.estado = estado
-	const resultado = await tarea.save()
-	if(!resultado) next()
-	res.status(200).send('Estado actualizado correctamente')
 }
-
 
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
+ * Funcion para eliminar una tarea
  * 
- * eliminar la tarea de la base de datos
-*/
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {object} next - next function
+ */
 exports.eliminarTarea = async (req, res, next) => {
-	const { id } = req.params
-	const resultado = await Tareas.destroy({
-		where: {
-			id
-		}
-	})
-	if(!resultado) next()
-	res.status(200).send('Tarea eliminada correctamente')
+	try {
+		const { id } = req.params
+		const resultado = await Tareas.destroy({
+			where: {
+				id
+			}
+		})
+		if (!resultado) next()
+		return res.status(200).send('Tarea eliminada correctamente')
+	} catch (err) {
+		return res.status(500).send('Ha ocurrido un error')
+	}
 }
-
-

@@ -2,44 +2,42 @@ extends layout
 block contenido
 	.contenido-principal
 		h1 #{nombrePagina} - #{proyecto.nombre}
-
-		//- formulario agregar tareas
-		//- desde el controlador le paso el objeto 'proyecto'
-		//- con todos los datos del proyecto
-		form(class="agregar-tarea" method="post" action=`/proyectos/${proyecto.url}`)
+		form(class="agregar-tarea" 
+				 method="post" 
+				 action=`/proyectos/${proyecto.url}`)
 			.campo
 				label(for="tarea") Tarea:
-				input(type="text" class="nombre-tarea" name="tarea" 
-			 		  placeholder="Nombre de la tarea" required)
+				input(type="text" 
+							class="nombre-tarea" 
+							name="tarea" 
+			 		  	placeholder="Nombre de la tarea" 
+			 		  	required)
 			.campo.enviar
-				input(class="boton nueva-tarea" type="submit" value="Agregar")
-
-		//- listado de tareas
-		//- desde el controlador le paso el objeto 'tareas'
-		//- que tiene las tareas de cada proyecto
+				input(class="boton nueva-tarea" 
+							type="submit" 
+							value="Agregar")
 		.listado-pendientes
 			ul
-				if tareas.length
-					each tarea in tareas
-						li(class="tarea" data-tarea=`${tarea.id}`)
-							p= tarea.tarea
-							.acciones
-								if tarea.estado	
-									i(class="far fa-check-circle completo")
-								else
-									i(class="far fa-check-circle")
-								i(class="fas fa-trash")
-				else
-					p No hay tareas para este proyecto
-
-		//- barra de avance del proyecto
+				if tareas
+					if tareas.length
+						each tarea in tareas
+							li(class="tarea" data-tarea=`${tarea.id}`)
+								p= tarea.tarea
+								.acciones
+									if tarea.estado
+										i(class="far fa-check-circle completo")
+									else
+										i(class="far fa-check-circle")
+									i(class="fas fa-trash")
+					else
+						p No hay tareas para este proyecto
 		.avance
 			h2 Avance del proyecto
-			div(id="barra-avance" class="barra-avance")
-				div(id="porcentaje" class="porcentaje")
-
-		//- listar acciones
+			div#barra-avance.barra-avance
+				div#porcentaje.porcentaje
 		.contenedor-acciones
 			a(href=`/proyecto/editar/${proyecto.id}` class="boton") Editar
-			button(type="button" class="boton eliminar" id="eliminar-proyecto"
-				   data-proyecto-url=`${proyecto.url}`) Eliminar
+			button(type="button" 
+						 class="boton eliminar" 
+						 id="eliminar-proyecto"
+				   	 data-proyecto-url=`${proyecto.url}`) Eliminar

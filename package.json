@@ -4,45 +4,53 @@
   "description": "Proyecto Uptask del curso de Nodejs en Udemy",
   "main": "index.js",
   "scripts": {
-    "desarrollo": "concurrently \"npm run dev\" \"npm run watch\"",
+    "jsdoc": "jsdoc -c jsdoc.json",
+    "development": "concurrently \"npm run dev\" \"npm run watchdev\"",
+    "production": "concurrently \"npm run dev\" \"npm run watchprod\"",
     "dev": "nodemon ./index.js",
     "start": "node ./index.js",
-    "watch": "webpack --w --mode development"
+    "watchdev": "webpack --watch --mode development",
+    "watchprod": "webpack --watch --mode production"
   },
   "keywords": [
     "uptask",
-    "curso node js"
+    "nodejs"
   ],
-  "author": "Juan Pablo de la Torre (Udemy)",
+  "author": "Juan Pablo de la Torre Valdez (Udemy)",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
-    "concurrently": "^5.2.0",
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^6.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
+    "docdash": "^1.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "express-validator": "^6.4.0",
-    "html-to-text": "^5.1.1",
-    "juice": "^6.0.0",
-    "mysql2": "^2.1.0",
-    "nodemailer": "^6.4.6",
+    "express-validator": "^6.10.0",
+    "html-to-text": "^7.0.0",
+    "http-errors": "^1.8.0",
+    "juice": "^7.0.0",
+    "mysql2": "^2.2.5",
+    "nanoid": "^3.1.20",
+    "nodemailer": "^6.5.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.4",
-    "sequelize": "^5.21.7",
-    "shortid": "^2.2.15",
-    "slug": "^2.1.1",
-    "sweetalert2": "^9.10.12"
+    "pug": "^3.0.2",
+    "sequelize": "^6.5.0",
+    "slug": "^4.0.3",
+    "sweetalert2": "^10.15.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-loader": "^8.1.0",
-    "nodemon": "^2.0.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.9",
+    "babel-loader": "^8.2.2",
+    "eslint-config-prettier": "^8.1.0",
+    "jsdoc": "^3.6.6",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0"
   }
 }

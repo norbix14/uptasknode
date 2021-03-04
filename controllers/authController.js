@@ -1,13 +1,21 @@
 const Sequelize = require('sequelize')
 const passport = require('passport')
-const Usuarios = require('../models/Usuarios')
-const bcrypt = require('bcrypt')
 const crypto = require('crypto')
-const Op = Sequelize.Op
+const Usuarios = require('../models/Usuarios')
 const enviarEmail = require('../handlers/email')
+const { encryptPassword } = require('../helpers/passwordHandler')
+const Op = Sequelize.Op
 
 /**
- * autenticar usuario o redireccionar a 'iniciar-sesion' si no lo está
+ * Modulo que contiene funciones y middlewares para todo
+ * lo relacionado a la autenticacion y verificacion de
+ * un usuario
+ * 
+ * @module controllers/authController
+*/
+
+/**
+ * Middleware para autenticar al usuario mediante Passport
 */
 exports.autenticarUsuario = passport.authenticate('local', {
 	successRedirect: '/',
@@ -16,132 +24,120 @@ exports.autenticarUsuario = passport.authenticate('local', {
 	badRequestMessage: 'Campos obligatorios'
 })
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
+ * Middleware que revisa si el usuario esta autenticado o no
  * 
- * revisar si el usuario esta autenticado o sino redireccionar
- * a 'iniciar-sesion'
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {Function} next - function to continue with the next middleware
 */
 exports.usuarioAutenticado = (req, res, next) => {
-	// usuario autenticado
-	if(req.isAuthenticated()) {
-		return next()
-	}
-	// redirigir a iniciar-sesion si no esta autenticado
+	if(req.isAuthenticated()) return next()
 	return res.redirect('/iniciar-sesion')
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion que cierra y destruye la sesion
  * 
- * cerrar la sesion y redireccionar a 'iniciar-sesion'
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.cerrarSesion = (req, res) => {
 	req.session.destroy(() => {
-		res.redirect('/iniciar-sesion')
+		return res.redirect('/iniciar-sesion')
 	})
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion que envia un token para reestablecer la contraseña
  * 
- * generar un token para reestablecer la contraseña si el usuario es valido
- * y le envia un correo con los pasos a seguir
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.enviarToken = async (req, res) => {
-	// verificar que el usuario existe
-	const usuario = await Usuarios.findOne({
-		where: {
-			email: req.body.email
+	try {
+		const { email } = req.body
+		const usuario = await Usuarios.findOne({
+			where: {
+				email
+			}
+		})
+		if (!usuario) {
+			req.flash('error', 'Este email no pertenece a ninguna cuenta')
+			return res.redirect('/reestablecer')
 		}
-	})
-	// el usuario no existe
-	if(!usuario) {
-		req.flash('error', 'Este email no existe')
-		res.redirect('/reestablecer')
+		usuario.token = crypto.randomBytes(20).toString('hex')
+		usuario.expiracion = Date.now() + 3600000
+		await usuario.save()
+		const resetUrl = `${req.protocol}://${req.hostname}/reestablecer/${usuario.token}`
+		await enviarEmail.enviar({
+			usuario,
+			subject: 'Reestablecer contraseña',
+			resetUrl,
+			archivo: 'resetPassword'
+		})
+		req.flash('correcto', 'Se envió un mensaje a tu correo')
+		return res.redirect('/iniciar-sesion')
+	} catch (err) {
+		req.flash('error', 'Ha ocurrido un error')
+		return res.redirect('/reestablecer')
 	}
-	// el usuario existe asi que genero los datos de la recuperacion
-	usuario.token = crypto.randomBytes(20).toString('hex')
-	usuario.expiracion = Date.now() + 3600000
-	// guardar datos del token de recuperacion
-	await usuario.save()
-	// url de reestablecimiento
-	const resetUrl = `http://${req.headers.host}/reestablecer/${usuario.token}`
-	// envia el correo al usuario para reestablecer su contraseña
-	await enviarEmail.enviar({
-		usuario,
-		subject: 'Reestablecer contraseña',
-		resetUrl,
-		archivo: 'resetPassword'
-	})
-	// terminar y avisarle al usuario
-	req.flash('correcto', 'Se envió un mensaje a tu correo')
-	res.redirect('/iniciar-sesion')
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * 
- * validar token y mostrar el formulario para reestablecer la contraseña
+ * Funcion que valida el token
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.validarToken = async (req, res) => {
-	const usuario = await Usuarios.findOne({
-		where: {
-			token: req.params.token
+	try {
+		const { token } = req.params
+		const usuario = await Usuarios.findOne({
+			where: {
+				token
+			}
+		})
+		if (!usuario) {
+			req.flash('error', 'Has realizado una acción no válida')
+			return res.redirect('/reestablecer')
 		}
-	})
-	// si no existe el usuario o trata de cambiar la url
-	if(!usuario) {
-		req.flash('error', 'Has hecho una acción no válida')
-		res.redirect('/reestablecer')
+		return res.render('resetPassword')
+	} catch (err) {
+		req.flash('error', 'Ha ocurrido un error')
+		return res.redirect('/reestablecer')
 	}
-	// formulario para reestablecer la contraseña
-	res.render('resetPassword', {
-		nombrePagina: 'Reestablecer la contraseña'
-	})
 }
-
 
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion para actualizar la contraseña
  * 
- * actualizar la contraseña en la base de datos y redireccionar
- * a 'iniciar-sesion'
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.actualizarPassword = async (req, res) => {
-	// verificar token valido y fecha de expiracion (una hora)
-	const usuario = await Usuarios.findOne({
-		where: {
-			token: req.params.token,
-			expiracion: {
-				[Op.gte]: Date.now()
+	try {
+		const { token } = req.params
+		const usuario = await Usuarios.findOne({
+			where: {
+				token,
+				expiracion: {
+					[Op.gte]: Date.now()
+				}
 			}
+		})
+		if (!usuario) {
+			req.flash('error', 'Token inválido y/o expirado')
+			return res.redirect('/reestablecer')
 		}
-	})
-	// el token es invalido y/o expiro despues de una hora
-	if(!usuario) {
-		req.flash('error', 'Token inválido y/o expirado')
-		res.redirect('/reestablecer')
+		const { password } = req.body
+		usuario.password = encryptPassword(password)
+		usuario.token = null
+		usuario.expiracion = null
+		await usuario.save()
+		req.flash('correcto', 'Tu contraseña se reestableció correctamente')
+		return res.redirect('/iniciar-sesion')
+	} catch (err) {
+		req.flash('error', 'Ha ocurrido un error')
+		return res.redirect('/reestablecer')
 	}
-	// el usuario es valido y existe, encriptar la nueva contraseña
-	// y limpiar token y expiracion
-	usuario.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
-	usuario.token = null
-	usuario.expiracion = null
-	// guardar nueva contraseña
-	await usuario.save()
-	req.flash('correcto', 'Tu contraseña se reestableció correctamente')
-	res.redirect('/iniciar-sesion')
 }
-
-

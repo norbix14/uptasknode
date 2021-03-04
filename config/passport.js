@@ -2,11 +2,17 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const Usuarios = require('../models/Usuarios')
 
+/**
+ * Modulo para configurar la autenticacion
+ * 
+ * @module config/passport
+*/
+
 passport.use(new LocalStrategy(
 	{
 		usernameField: 'email',
 		passwordField: 'password'
-	},
+	}, 
 	async (email, password, done) => {
 		try {
 			const usuario = await Usuarios.findOne({
@@ -16,11 +22,15 @@ passport.use(new LocalStrategy(
 				}
 			})
 			if(!usuario.verificarPassword(password)) {
-				return done(null, false, { message: 'Error en la contraseña' })
+				return done(null, false, {
+					message: 'Credenciales incorrectas. Revisa tus datos'
+				})
 			}
 			return done(null, usuario)
 		} catch(error) {
-			return done(null, false, { message: 'Este email no existe' })
+			return done(null, false, {
+				message: 'Este email no pertenece a ninguna cuenta'
+			})
 		}
 	}
 ))

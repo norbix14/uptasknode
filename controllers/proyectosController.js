@@ -1,227 +1,231 @@
 const Proyectos = require('../models/Proyectos')
 const Tareas = require('../models/Tareas')
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion para renderizar la pagina inicial
  * 
- * mostrar el inicio y todos los proyectos del usuario 
- * autenticado
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.proyectosHome = async (req, res) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
+	const usuarioId = res.locals?.usuario?.id
 	const proyectos = await Proyectos.findAll({
 		where: {
 			usuarioId
 		}
 	})
-	// pagina a mostrar
-	res.render('index', {
+	return res.render('index', {
 		nombrePagina: 'Proyectos',
 		proyectos
 	})
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion para renderizar un formulario para un nuevo proyecto
  * 
- * mostrar el formulario para agregar un proyecto
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.formularioProyecto = async (req, res) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
+	const usuarioId = res.locals?.usuario?.id
 	const proyectos = await Proyectos.findAll({
 		where: {
 			usuarioId
 		}
 	})
-	// pagina a mostrar
-	res.render('nuevoProyecto', {
+	return res.render('nuevoProyecto', {
 		nombrePagina: 'Nuevo proyecto',
 		proyectos
 	})
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
+ * Funcion para crear un nuevo proyecto en la base de datos
  * 
- * validar e insertar el proyecto en la base de datos
+ * @param {object} req - user request
+ * @param {object} res - server response
 */
 exports.nuevoProyecto = async (req, res) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
-	const proyectos = await Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	// validar que tengamos algo en el input
-	const { nombre } = req.body
-	let errores = []
-	if(!nombre) {
-		errores.push({
-			texto: 'Agregar nombre al proyecto'
-		})
-	}
-	// si hay errores
-	if(errores.length > 0) {
-		res.render('nuevoProyecto', {
-			nombrePagina: 'Nuevo proyecto',
-			errores,
-			proyectos
-		})
-	} else {
-		// no hay errores e insertar en BBDD
-		const usuarioId = res.locals.usuario.id
-		await Proyectos.create({ nombre, usuarioId })
-		res.redirect('/')
-	}
-}
-
-
-/**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
- * 
- * retornar las tareas del proyecto solicitado
- * mediante la url
-*/
-exports.proyectoPorUrl = async (req, res, next) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
-	const proyectosPromise = Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	const proyectoPromise = Proyectos.findOne({
-		where: {
-			url: req.params.url,
-			usuarioId
-		}
-	})
-	const [proyectos, proyecto] = await Promise.all([proyectosPromise,
-	                                                 proyectoPromise])
-	// consultar tareas del proyecto actual
-	const tareas = await Tareas.findAll({
-		where: {
-			proyectoId: proyecto.id
-		}
-	})
-	if(!proyecto) return next()
-	// pagina a mostrar
-	res.render('tareas', {
-		nombrePagina: 'Tareas del proyecto',
-		proyectos,
-		proyecto,
-		tareas
-	})
-}
-
-
-/**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * 
- * mostrar el formulario para editar el proyecto
- * y luego poder guardarlo
-*/
-exports.formularioEditar = async (req, res) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
-	const proyectosPromise = Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	const proyectoPromise = Proyectos.findOne({
-		where: {
-			id: req.params.id,
-			usuarioId
-		}
-	})
-	const [proyectos, proyecto] = await Promise.all([proyectosPromise,
-	                                                 proyectoPromise])
-	// pagina a mostrar
-	res.render('nuevoProyecto', {
-		nombrePagina: 'Editar proyecto',
-		proyectos,
-		proyecto
-	})
-}
-
-
-/**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * 
- * validar y actualizar el proyecto en la base de datos
-*/
-exports.actualizarProyecto = async (req, res) => {
-	// este codigo es para mostrar todo en el <aside>
-	const usuarioId = res.locals.usuario.id
-	const proyectos = await Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	// validar que tengamos algo en el input
-	const { nombre } = req.body
-	let errores = []
-	if(!nombre) {
-		errores.push({
-			texto: 'Agregar nombre al proyecto'
-		})
-	}
-	// si hay errores
-	if(errores.length > 0) {
-		res.render('nuevoProyecto', {
-			nombrePagina: 'Nuevo proyecto',
-			errores,
-			proyectos
-		})
-	} else {
-		// no hay errores y actualizar en BBDD
-		await Proyectos.update(
-		{
-			nombre
-		},
-		{
+	try {
+		const errores = []
+		const usuarioId = res.locals?.usuario?.id
+		const proyectos = await Proyectos.findAll({
 			where: {
-				id: req.params.id,
 				usuarioId
 			}
 		})
-		res.redirect('/')
+		const { nombre } = req.body
+		if (!nombre) {
+			errores.push({
+				texto: 'Agregar nombre al proyecto'
+			})
+		}
+		if (errores.length > 0) {
+			return res.render('nuevoProyecto', {
+				nombrePagina: 'Nuevo proyecto',
+				errores,
+				proyectos
+			})
+		} else {
+			await Proyectos.create({ nombre, usuarioId })
+			return res.redirect('/')
+		}	
+	} catch (err) {
+		return res.redirect('/')
 	}
 }
 
-
 /**
- * @param req es la peticion que hace el usuario
- * @param res es la respuesta que da el servidor
- * @param next continua el flujo de ejecucion
+ * Funcion para renderizar las tareas de un proyecto segun la url
  * 
- * eliminar el proyecto de la base de datos
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {function} next - next function
 */
-exports.eliminarProyecto = async (req, res, next) => {
-	const usuarioId = res.locals.usuario.id
-	const { urlProyecto } = req.query
-	const resultado = await Proyectos.destroy({
-		where: {
-			url: urlProyecto,
-			usuarioId
-		}
-	})
-	if(!resultado) next()
-	res.send('Proyecto eliminado correctamente')
+exports.proyectoPorUrl = async (req, res, next) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { url } = req.params
+		const proyectosPromise = Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const proyectoPromise = Proyectos.findOne({
+			where: {
+				url,
+				usuarioId
+			}
+		})
+		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		const tareas = await Tareas.findAll({
+			where: {
+				proyectoId: proyecto.id
+			}
+		})
+		if (!proyecto) return next()
+		return res.render('tareas', {
+			nombrePagina: 'Tareas del proyecto',
+			proyectos,
+			proyecto,
+			tareas
+		})	
+	} catch (err) {
+		return res.redirect('/')
+	}
 }
 
+/**
+ * Funcion para renderizar un formulario para editar un proyecto
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.formularioEditar = async (req, res) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { id } = req.params
+		const proyectosPromise = Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const proyectoPromise = Proyectos.findOne({
+			where: {
+				id,
+				usuarioId
+			}
+		})
+		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Editar proyecto',
+			proyectos,
+			proyecto
+		})	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
 
+/**
+ * Funcion para actualizar un proyecto
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.actualizarProyecto = async (req, res) => {
+	try {
+		const errores = []
+		const usuarioId = res.locals?.usuario?.id
+		const { id } = req.params
+		const proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const { nombre } = req.body
+		if (!nombre) {
+			errores.push({
+				texto: 'Agregar nombre al proyecto'
+			})
+		}
+		if (errores.length > 0) {
+			res.render('nuevoProyecto', {
+				nombrePagina: 'Nuevo proyecto',
+				errores,
+				proyectos
+			})
+		} else {
+			await Proyectos.update(
+				{
+					nombre
+				},
+				{
+					where: {
+						id,
+						usuarioId
+					}
+				}
+			)
+			return res.redirect('/')
+		}	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
+
+/**
+ * Funcion para eliminar un proyecto
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {function} next - next function
+*/
+exports.eliminarProyecto = async (req, res, next) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { urlProyecto } = req.query
+		const proyecto = await Proyectos.findOne({
+			where: {
+				url: urlProyecto,
+				usuarioId
+			}
+		})
+		if(!proyecto) {
+			return next()
+		}
+		await Tareas.destroy({
+			where: {
+				proyectoId: proyecto.id
+			}
+		})
+		await Proyectos.destroy({
+			where: {
+				url: urlProyecto,
+				usuarioId
+			}
+		})
+		return res.status(200).send('Proyecto eliminado correctamente')	
+	} catch (err) {
+		return res.status(500).send('Ha ocurrido un error')
+	}
+}
