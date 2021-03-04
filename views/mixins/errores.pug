@@ -1,7 +1,0 @@
-mixin mostrarErrores(errors = {})
-	if errors.mensajes
-	  .alertas
-      each categoria in Object.keys(errors.mensajes)
-        each error in mensajes[categoria]
-          div(class=`alerta ${categoria}`)
-            p= error

@@ -1,0 +1,8 @@
+mixin listadoProyectos(proyectos = [])
+  if proyectos.length
+    ul#proyectos.proyectos
+      each proyecto in proyectos
+        li
+          a(href=`/proyectos/${proyecto.url}`)= proyecto.nombre
+  else
+    p.informative Comienza a crear

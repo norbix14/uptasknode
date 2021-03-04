@@ -9,7 +9,7 @@ const {
 /**
  * Modulo que contiene el modelo de los Usuarios
  *
- * @module models/Proyectos
+ * @module models/Usuarios
 */
 
 const Usuarios = db.define('usuarios',

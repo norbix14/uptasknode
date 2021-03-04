@@ -1,0 +1,14 @@
+mixin listadoTareas(tareas = [])
+  if tareas.length
+    ul
+      each tarea in tareas
+        li(class="tarea" data-tarea=`${tarea.id}`)
+          p= tarea.tarea
+          .acciones
+            if tarea.estado
+              i.far.fa-check-circle.completo
+            else
+              i.far.fa-check-circle
+            i.fas.fa-trash
+  else
+    p.informative Aún no hay tareas

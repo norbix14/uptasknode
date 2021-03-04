@@ -156,7 +156,7 @@ body.index {
 .crear-proyecto a {
   color: #455A64;
 }
-.lista-proyectos ul{
+.lista-proyectos ul {
   list-style: none;
   padding: 1.5rem 0 0 0;
   margin: 0;
@@ -166,6 +166,9 @@ body.index {
 }
 .lista-proyectos ul li a:hover {
   color: #FDD835;
+}
+.lista-proyectos p.informative {
+  color: #eee;
 }
 
 /** Contenido Principal **/
@@ -227,6 +230,9 @@ body.index {
 }
 .listado-pendientes ul li i {
   cursor: pointer;
+}
+.listado-pendientes p.informative {
+  color: #111;
 }
 .acciones i:last-child {
   margin-left: 3rem;
@@ -346,4 +352,11 @@ form input[type="submit"] {
   padding: 1rem;
   background-color: #ddd;
   margin: 1rem auto 0 auto;
+}
+
+/** informative text **/
+p.informative {
+  font-size: 1.25rem;
+  margin: 0.5rem auto 0 auto;
+  text-align: center;
 }

@@ -55,7 +55,7 @@ module.exports = function() {
 	  authController.usuarioAutenticado,
 		proyectosController.eliminarProyecto
 	)
-	
+
 
 	/**** Rutas para las tareas ****/
 	// crear nueva tarea
@@ -85,9 +85,6 @@ module.exports = function() {
 	router.post('/crear-cuenta',
 		usuariosController.crearCuenta
 	)
-	/*router.get('/confirmar/:correo',
-		usuariosController.confirmarCuenta
-	)*/
 
 	// iniciar sesion
 	router.get('/iniciar-sesion',
@@ -101,22 +98,6 @@ module.exports = function() {
 	router.get('/cerrar-sesion',
 		authController.cerrarSesion
 	)
-
-	// reestablecer contraseña
-	/*
-	router.get('/reestablecer', 
-		usuariosController.formReestablecerPassword
-	)
-	router.post('/reestablecer',
-		authController.enviarToken
-	)
-	router.get('/reestablecer/:token',
-		authController.validarToken
-	)
-	router.post('/reestablecer/:token',
-		authController.actualizarPassword
-	)
-	*/
 
 	return router
 }

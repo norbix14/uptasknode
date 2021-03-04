@@ -1,7 +1,9 @@
 extends layout
 block contenido
 	.contenido-principal
+
 		h1 #{nombrePagina} - #{proyecto.nombre}
+
 		form(class="agregar-tarea" 
 				 method="post" 
 				 action=`/proyectos/${proyecto.url}`)
@@ -16,25 +18,18 @@ block contenido
 				input(class="boton nueva-tarea" 
 							type="submit" 
 							value="Agregar")
+
 		.listado-pendientes
-			ul
-				if tareas
-					if tareas.length
-						each tarea in tareas
-							li(class="tarea" data-tarea=`${tarea.id}`)
-								p= tarea.tarea
-								.acciones
-									if tarea.estado
-										i(class="far fa-check-circle completo")
-									else
-										i(class="far fa-check-circle")
-									i(class="fas fa-trash")
-					else
-						p No hay tareas para este proyecto
-		.avance
-			h2 Avance del proyecto
-			div#barra-avance.barra-avance
-				div#porcentaje.porcentaje
+			include mixins/listadoTareas
+			if tareas
+				+listadoTareas(tareas)
+
+		if tareas.length
+			.avance
+				h2 Avance del proyecto
+				div#barra-avance.barra-avance
+					div#porcentaje.porcentaje
+
 		.contenedor-acciones
 			a(href=`/proyecto/editar/${proyecto.id}` class="boton") Editar
 			button(type="button" 

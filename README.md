@@ -1,6 +1,10 @@
-# Proyecto Uptask
+# Uptask
 
-Creación de proyectos y tareas para cada proyecto
+Un proyecto simple para la creación de proyectos y tareas para cada proyecto
+
+Realizado en Node con Pug como motor de plantilla y usando MySql como base de datos
+
+Hace uso de varias variables de entorno para funcionar
 
 ## Snapshots
 

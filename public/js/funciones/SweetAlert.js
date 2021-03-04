@@ -1,17 +1,6 @@
 import Swal from 'sweetalert2'
 
 /**
- * Alerta comun de SweetAlert
- * 
- * @param {string} title - title of the modal
- * @param {string} msg - message to show
- * @param {string} icon - the icon class
-*/
-export const SwalAlert = (title = 'Error', msg = 'Ocurrio un error', icon = 'error') => {
-  return Swal.fire(title, msg, icon)
-}
-
-/**
  * Funcion que pregunta por la eliminacion
  * 
  * @param {function} callback - executes callback when the

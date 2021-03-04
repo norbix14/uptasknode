@@ -2,6 +2,13 @@ const Proyectos = require('../models/Proyectos')
 const Tareas = require('../models/Tareas')
 
 /**
+ * Modulo que contiene funciones y middlewares para todo
+ * lo relacionado al manejo de los proyectos
+ *
+ * @module controllers/proyectosController
+*/
+
+/**
  * Funcion para renderizar la pagina inicial
  * 
  * @param {object} req - user request
@@ -9,15 +16,24 @@ const Tareas = require('../models/Tareas')
 */
 exports.proyectosHome = async (req, res) => {
 	const usuarioId = res.locals?.usuario?.id
-	const proyectos = await Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	return res.render('index', {
-		nombrePagina: 'Proyectos',
-		proyectos
-	})
+	let proyectos = []
+	try {
+		proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		return res.render('index', {
+			nombrePagina: 'Proyectos',
+			proyectos
+		})	
+	} catch (err) {
+		return res.render('index', {
+			nombrePagina: 'Proyectos',
+			proyectos
+		})
+	}
+	
 }
 
 /**
@@ -28,15 +44,24 @@ exports.proyectosHome = async (req, res) => {
 */
 exports.formularioProyecto = async (req, res) => {
 	const usuarioId = res.locals?.usuario?.id
-	const proyectos = await Proyectos.findAll({
-		where: {
-			usuarioId
-		}
-	})
-	return res.render('nuevoProyecto', {
-		nombrePagina: 'Nuevo proyecto',
-		proyectos
-	})
+	let proyectos = []
+	try {
+		proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Nuevo proyecto',
+			proyectos
+		})	
+	} catch (err) {
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Nuevo proyecto',
+			proyectos
+		})
+	}
+	
 }
 
 /**

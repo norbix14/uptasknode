@@ -1,6 +1,13 @@
 const bcrypt = require('bcryptjs')
 
 /**
+ * Modulo encargado del manejo de la contraseña, tanto
+ * su encriptacion como su verificacion
+ * 
+ * @module helpers/passwordHandler
+*/
+
+/**
  * Funcion para encriptar contraseña de manera
  * sincronica
  * 

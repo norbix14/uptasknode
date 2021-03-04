@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>controllers/proyectosController.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-config_db.html">config/db</a></li><li><a href="module-config_passport.html">config/passport</a></li><li><a href="module-config_UptaskInfoDB.html">config/UptaskInfoDB</a></li><li><a href="module-controllers_authController.html">controllers/authController</a><ul class='methods'><li data-type='method'><a href="module-controllers_authController.html#.cerrarSesion">cerrarSesion</a></li><li data-type='method'><a href="module-controllers_authController.html#.usuarioAutenticado">usuarioAutenticado</a></li></ul></li><li><a href="module-controllers_proyectosController.html">controllers/proyectosController</a><ul class='methods'><li data-type='method'><a href="module-controllers_proyectosController.html#.actualizarProyecto">actualizarProyecto</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.eliminarProyecto">eliminarProyecto</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.formularioEditar">formularioEditar</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.formularioProyecto">formularioProyecto</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.nuevoProyecto">nuevoProyecto</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.proyectoPorUrl">proyectoPorUrl</a></li><li data-type='method'><a href="module-controllers_proyectosController.html#.proyectosHome">proyectosHome</a></li></ul></li><li><a href="module-controllers_tareasController.html">controllers/tareasController</a><ul class='methods'><li data-type='method'><a href="module-controllers_tareasController.html#.agregarTarea">agregarTarea</a></li><li data-type='method'><a href="module-controllers_tareasController.html#.cambiarEstadoTarea">cambiarEstadoTarea</a></li><li data-type='method'><a href="module-controllers_tareasController.html#.eliminarTarea">eliminarTarea</a></li></ul></li><li><a href="module-controllers_usuariosController.html">controllers/usuariosController</a><ul class='methods'><li data-type='method'><a href="module-controllers_usuariosController.html#.crearCuenta">crearCuenta</a></li><li data-type='method'><a href="module-controllers_usuariosController.html#.formCrearCuenta">formCrearCuenta</a></li><li data-type='method'><a href="module-controllers_usuariosController.html#.formIniciarSesion">formIniciarSesion</a></li></ul></li><li><a href="module-helpers_passwordHandler.html">helpers/passwordHandler</a><ul class='methods'><li data-type='method'><a href="module-helpers_passwordHandler.html#.comparePassword">comparePassword</a></li><li data-type='method'><a href="module-helpers_passwordHandler.html#.encryptPassword">encryptPassword</a></li></ul></li><li><a href="module-models_Proyectos.html">models/Proyectos</a></li><li><a href="module-models_Tareas.html">models/Tareas</a></li><li><a href="module-models_Usuarios.html">models/Usuarios</a></li><li><a href="module-routes_index.html">routes/index</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">controllers/proyectosController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Proyectos = require('../models/Proyectos')
+const Tareas = require('../models/Tareas')
+
+/**
+ * Modulo que contiene funciones y middlewares para todo
+ * lo relacionado al manejo de los proyectos
+ *
+ * @module controllers/proyectosController
+*/
+
+/**
+ * Funcion para renderizar la pagina inicial
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.proyectosHome = async (req, res) => {
+	const usuarioId = res.locals?.usuario?.id
+	let proyectos = []
+	try {
+		proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		return res.render('index', {
+			nombrePagina: 'Proyectos',
+			proyectos
+		})	
+	} catch (err) {
+		return res.render('index', {
+			nombrePagina: 'Proyectos',
+			proyectos
+		})
+	}
+	
+}
+
+/**
+ * Funcion para renderizar un formulario para un nuevo proyecto
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.formularioProyecto = async (req, res) => {
+	const usuarioId = res.locals?.usuario?.id
+	let proyectos = []
+	try {
+		proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Nuevo proyecto',
+			proyectos
+		})	
+	} catch (err) {
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Nuevo proyecto',
+			proyectos
+		})
+	}
+	
+}
+
+/**
+ * Funcion para crear un nuevo proyecto en la base de datos
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.nuevoProyecto = async (req, res) => {
+	try {
+		const errores = []
+		const usuarioId = res.locals?.usuario?.id
+		const proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const { nombre } = req.body
+		if (!nombre) {
+			errores.push({
+				texto: 'Agregar nombre al proyecto'
+			})
+		}
+		if (errores.length > 0) {
+			return res.render('nuevoProyecto', {
+				nombrePagina: 'Nuevo proyecto',
+				errores,
+				proyectos
+			})
+		} else {
+			await Proyectos.create({ nombre, usuarioId })
+			return res.redirect('/')
+		}	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
+
+/**
+ * Funcion para renderizar las tareas de un proyecto segun la url
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {function} next - next function
+*/
+exports.proyectoPorUrl = async (req, res, next) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { url } = req.params
+		const proyectosPromise = Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const proyectoPromise = Proyectos.findOne({
+			where: {
+				url,
+				usuarioId
+			}
+		})
+		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		const tareas = await Tareas.findAll({
+			where: {
+				proyectoId: proyecto.id
+			}
+		})
+		if (!proyecto) return next()
+		return res.render('tareas', {
+			nombrePagina: 'Tareas del proyecto',
+			proyectos,
+			proyecto,
+			tareas
+		})	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
+
+/**
+ * Funcion para renderizar un formulario para editar un proyecto
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.formularioEditar = async (req, res) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { id } = req.params
+		const proyectosPromise = Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const proyectoPromise = Proyectos.findOne({
+			where: {
+				id,
+				usuarioId
+			}
+		})
+		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		return res.render('nuevoProyecto', {
+			nombrePagina: 'Editar proyecto',
+			proyectos,
+			proyecto
+		})	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
+
+/**
+ * Funcion para actualizar un proyecto
+ * @param {object} req - user request
+ * @param {object} res - server response
+*/
+exports.actualizarProyecto = async (req, res) => {
+	try {
+		const errores = []
+		const usuarioId = res.locals?.usuario?.id
+		const { id } = req.params
+		const proyectos = await Proyectos.findAll({
+			where: {
+				usuarioId
+			}
+		})
+		const { nombre } = req.body
+		if (!nombre) {
+			errores.push({
+				texto: 'Agregar nombre al proyecto'
+			})
+		}
+		if (errores.length > 0) {
+			res.render('nuevoProyecto', {
+				nombrePagina: 'Nuevo proyecto',
+				errores,
+				proyectos
+			})
+		} else {
+			await Proyectos.update(
+				{
+					nombre
+				},
+				{
+					where: {
+						id,
+						usuarioId
+					}
+				}
+			)
+			return res.redirect('/')
+		}	
+	} catch (err) {
+		return res.redirect('/')
+	}
+}
+
+/**
+ * Funcion para eliminar un proyecto
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {function} next - next function
+*/
+exports.eliminarProyecto = async (req, res, next) => {
+	try {
+		const usuarioId = res.locals?.usuario?.id
+		const { urlProyecto } = req.query
+		const proyecto = await Proyectos.findOne({
+			where: {
+				url: urlProyecto,
+				usuarioId
+			}
+		})
+		if(!proyecto) {
+			return next()
+		}
+		await Tareas.destroy({
+			where: {
+				proyectoId: proyecto.id
+			}
+		})
+		await Proyectos.destroy({
+			where: {
+				url: urlProyecto,
+				usuarioId
+			}
+		})
+		return res.status(200).send('Proyecto eliminado correctamente')	
+	} catch (err) {
+		return res.status(500).send('Ha ocurrido un error')
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Thu Mar 04 2021 16:27:49 GMT-0300 (hora estándar de Argentina) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

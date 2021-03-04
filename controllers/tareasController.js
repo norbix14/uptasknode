@@ -2,6 +2,13 @@ const Proyectos = require('../models/Proyectos')
 const Tareas = require('../models/Tareas')
 
 /**
+ * Modulo que contiene funciones y middlewares para todo
+ * lo relacionado al manejo de las tareas
+ *
+ * @module controllers/tareasController
+*/
+
+/**
  * Funcion para agregar una tarea
  * 
  * @param {object} req - user request

@@ -16,7 +16,6 @@
     "include": [
       "config",
       "controllers",
-      "handlers",
       "helpers",
       "models",
       "routes"
