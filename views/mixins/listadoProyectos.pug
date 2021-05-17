@@ -1,8 +1,8 @@
 mixin listadoProyectos(proyectos = [])
-  if proyectos.length
-    ul#proyectos.proyectos
-      each proyecto in proyectos
-        li
-          a(href=`/proyectos/${proyecto.url}`)= proyecto.nombre
-  else
-    p.informative Comienza a crear
+	if (proyectos.length > 0)
+		ul(id="proyectos" class="proyectos")
+			each proyecto in proyectos
+				li
+					a(href=`/proyectos/${proyecto.url}`)=proyecto.nombre
+	else
+		p.informative Comienza a crear

@@ -1,0 +1,4 @@
+/views/**/*
+/snapshots/
+/docs/
+/public/dist/*

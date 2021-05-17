@@ -17,21 +17,23 @@ const Tareas = require('../models/Tareas')
 */
 exports.agregarTarea = async (req, res, next) => {
 	try {
-		const { url } = req.params
-		const proyecto = await Proyectos.findOne({
+		const { body, params } = req
+		const { url } = params
+		const { id } = await Proyectos.findOne({
 			where: {
 				url
 			}
 		})
-		const { tarea } = req.body
+		const { tarea } = body
 		const estado = 0
-		const proyectoId = proyecto.id
 		const resultado = await Tareas.create({
 			tarea,
 			estado,
-			proyectoId
+			proyectoId: id
 		})
-		if (!resultado) next()
+		if (!resultado) {
+			return next()
+		}
 		return res.redirect(`/proyectos/${url}`)
 	} catch (err) {
 		return res.redirect(`/`)
@@ -47,7 +49,8 @@ exports.agregarTarea = async (req, res, next) => {
 */
 exports.cambiarEstadoTarea = async (req, res, next) => {
 	try {
-		const { id } = req.params
+		const { params } = req
+		const { id } = params
 		const tarea = await Tareas.findOne({
 			where: {
 				id
@@ -59,7 +62,9 @@ exports.cambiarEstadoTarea = async (req, res, next) => {
 		}
 		tarea.estado = estado
 		const resultado = await tarea.save()
-		if (!resultado) next()
+		if (!resultado) {
+			return next()
+		}
 		return res.status(200).send('Estado actualizado correctamente')
 	} catch (err) {
 		return res.status(500).send('Ha ocurrido un error')
@@ -75,13 +80,16 @@ exports.cambiarEstadoTarea = async (req, res, next) => {
  */
 exports.eliminarTarea = async (req, res, next) => {
 	try {
-		const { id } = req.params
+		const { params } = req
+		const { id } = params
 		const resultado = await Tareas.destroy({
 			where: {
 				id
 			}
 		})
-		if (!resultado) next()
+		if (!resultado) {
+			return next()
+		}
 		return res.status(200).send('Tarea eliminada correctamente')
 	} catch (err) {
 		return res.status(500).send('Ha ocurrido un error')

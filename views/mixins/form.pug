@@ -1,42 +1,36 @@
-mixin form(mode = 'signup', locals = {})
-  - var title = `${mode === 'signup' ? 'Crear cuenta' : 'Iniciar sesión'}`
-  - var action = `${mode === 'signup' ? '/crear-cuenta' : '/iniciar-sesion'}`
-  - var href = `${mode === 'signup' ? '/iniciar-sesion' : '/crear-cuenta'}`
-  - var hreftitle = `${mode === 'signup' ? 'Iniciar sesión' : 'Crear cuenta'}`
+mixin form(mode = 'signup', messages = {})
+  -var title = `${mode === 'signup' ? 'Crear cuenta' : 'Iniciar sesión'}`
+  -var action = `${mode === 'signup' ? '/crear-cuenta' : '/iniciar-sesion'}`
+  -var href = `${mode === 'signup' ? '/iniciar-sesion' : '/crear-cuenta'}`
+  -var hreftitle = `${mode === 'signup' ? 'Iniciar sesión' : 'Crear cuenta'}`
 
-  h1= title
-  
-  form(id="formulario" 
-       class="caja caja-login" 
-       method="post" 
-       action= action)
+  h1=title
+
+  form(id="formulario" class="caja caja-login" method="post" action=action)
     .campo
       label(for="email") Email:
-      input(type="email" 
-            name="email" 
-            placeholder="Tu email" 
-            required 
-            autocomplete
-            autofocus
-            value= email)
+      input(
+        type="email"
+        name="email"
+        placeholder="Tu email"
+        required
+        autocomplete
+        autofocus)
     .campo
       label(for="password") Contraseña:
-      input(type="password" 
-            name="password" 
-            placeholder="Tu contraseña" 
-            required 
-            autocomplete
-            value= password)
+      input(
+        type="password"
+        name="password"
+        placeholder="Tu contraseña"
+        required
+        autocomplete)
     .campo.enviar
-      input(type="submit" 
-            class="boton" 
-            value= title)
+      input(
+        type="submit"
+        class="boton"
+        value=title)
     .campo
-      a(href= href)= hreftitle
+      a(href= href)=hreftitle
 
-    if locals.mensajes
-      .alertas
-        each categoria in Object.keys(locals.mensajes)
-          each error in mensajes[categoria]
-            div(class=`alerta ${categoria}`)
-              p= error
+    include alerts
+    +alerts(messages)

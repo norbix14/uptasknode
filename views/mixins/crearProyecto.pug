@@ -1,19 +1,19 @@
 mixin crearProyecto(proyecto = {})
-	- var id = proyecto.id || ''
-	- var name = proyecto.nombre || ''
+	-var project_id = proyecto.id || ''
+	-var name = proyecto.nombre || ''
+	-var mode = name.length > 0 ? 'editar' : 'nuevo'
+	-var action = `/proyectos/${mode}/${project_id}`
 
-	form(class="agregar-proyecto" 
-			 method="post" 
-			 action=`/nuevo-proyecto/${id}`)
+	form(class="agregar-proyecto" method="post" action=action)
 		.campo
 			label(for="nombre") Nombre proyecto:
 			input(type="text" 
-						id="nombre" 
-						name="nombre" 
-				  	placeholder="Nombre proyecto" 
-						autofocus
-				  	value= name)
+				id="nombre"
+				name="nombre" 
+		  	placeholder="Nombre proyecto" 
+		  	autofocus
+		  	value=name)
 		.campo.enviar
 			input(type="submit" 
-						class="boton" 
-				  	value=`${name ? 'Guardar' : 'Agregar'}`)
+				class="boton" 
+				value=`${name ? 'Guardar' : 'Agregar'}`)

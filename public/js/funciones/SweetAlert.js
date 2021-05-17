@@ -1,6 +1,12 @@
 import Swal from 'sweetalert2'
 
 /**
+ * Modulo encargado del manejo de las alertas
+ *
+ * @module funciones/SweetAlert
+*/
+
+/**
  * Funcion que pregunta por la eliminacion
  * 
  * @param {function} callback - executes callback when the

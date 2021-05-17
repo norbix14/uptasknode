@@ -1,50 +1,48 @@
-import axios from 'axios'
 import { actualizarAvance } from '../funciones/avance'
 import { SwalDelete, Toast } from '../funciones/SweetAlert'
+import { updateStatus, deleteTask } from '../funciones/tasksHandler'
 
 const tareas = document.querySelector('.listado-pendientes')
 
 if(tareas) {
-	tareas.addEventListener('click', e => {
-		if(e.target.classList.contains('fa-check-circle')) {
-			const icono = e.target
-			const idTarea = icono.parentElement.parentElement.dataset.tarea
-			const url = `${location.origin}/tareas/${idTarea}`
-			axios.patch(url, {
-				idTarea
-			})
-			.then(res => {
-				if(res.status === 200) {
-					icono.classList.toggle('completo')
-					actualizarAvance()
+	tareas.addEventListener('click', async (e) => {
+		const { origin } = window.location
+		const { target } = e
+		const { classList, parentElement } = target
+		const { dataset = {} } = parentElement
+		const { idTarea = '' } = dataset
+		if(classList.contains('fa-check-circle')) {
+			try {
+				const {
+					status,
+					data
+				} = await updateStatus(origin, idTarea)
+				if(status !== 200) {
+					return Toast('warning', data)
 				}
-			})
-			.catch(err => {
-				Toast('error', 'Ha ocurrido un error')
-			})
+				classList.toggle('completo')
+				actualizarAvance()
+			} catch (error) {
+				return Toast('error', 'Ha ocurrido un error')
+			}
 		}
-		if(e.target.classList.contains('fa-trash')) {
-			const tareaHtml = e.target.parentElement.parentElement
-			const idTarea = tareaHtml.dataset.tarea
-			SwalDelete(() => {
-				const url = `${location.origin}/tareas/${idTarea}`
-				axios.delete(url, {
-					params: {
-						idTarea
+		if(classList.contains('fa-trash')) {
+			SwalDelete(async () => {
+				try {
+					const tareaHtml = parentElement.parentElement
+					const {
+						status,
+						data
+					} = await deleteTask(origin, idTarea)
+					if (status !== 200) {
+						return Toast('warning', data)
 					}
-				})
-				.then(res => {
-					if (res.status === 200) {
-						tareaHtml.parentElement.removeChild(tareaHtml)
-						Toast('success', res.data)
-						actualizarAvance()
-					} else {
-						Toast('warning', res.data)
-					}
-				})
-				.catch(err => {
-					Toast('error', 'Ha ocurrido un error')
-				})
+					tareaHtml.parentElement.removeChild(tareaHtml)
+					Toast('success', data)
+					actualizarAvance()
+				} catch (error) {
+					return Toast('error', 'Ha ocurrido un error')
+				}
 			})
 		}
 	})

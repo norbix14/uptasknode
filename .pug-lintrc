@@ -1,0 +1,17 @@
+{
+	"disallowDuplicateAttributes": true,
+	"disallowLegacyMixinCall": true,
+	"disallowSpaceAfterCodeOperator": true,
+	"disallowSpacesInsideAttributeBrackets": true,
+	"requireLowerCaseAttributes": true,
+	"requireLowerCaseTags": true,
+	"requireStrictEqualityOperators": true,
+	// "validateAttributeQuoteMarks": "'",
+	"validateAttributeSeparator": {
+		"separator": " ",
+		"multiLineSeparator": "\n "
+	},
+	// "validateExtensions": true,
+	"validateIndentation": "\t",
+	"excludeFiles": ["node_modules/**"]
+}

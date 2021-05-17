@@ -23,24 +23,30 @@ passport.use(new LocalStrategy(
 			})
 			if(!usuario.verificarPassword(password)) {
 				return done(null, false, {
-					message: 'Credenciales incorrectas. Revisa tus datos'
+					message: 'Credenciales incorrectas. Revisa tus datos',
+					user: {
+						email
+					}
 				})
 			}
 			return done(null, usuario)
-		} catch(error) {
+		} catch (error) {
 			return done(null, false, {
-				message: 'Este email no pertenece a ninguna cuenta'
+				message: 'Este email no pertenece a ninguna cuenta',
+				user: {
+					email
+				}
 			})
 		}
 	}
 ))
 
-passport.serializeUser((usuario, callback) => {
-	callback(null, usuario)
+passport.serializeUser((usuario, done) => {
+	done(null, usuario)
 })
 
-passport.deserializeUser((usuario, callback) => {
-	callback(null, usuario)
+passport.deserializeUser((usuario, done) => {
+	done(null, usuario)
 })
 
 module.exports = passport

@@ -1,11 +1,11 @@
 mixin listadoTareas(tareas = [])
-  if tareas.length
+  if (tareas.length > 0)
     ul
       each tarea in tareas
-        li(class="tarea" data-tarea=`${tarea.id}`)
-          p= tarea.tarea
-          .acciones
-            if tarea.estado
+        li(class="tarea")
+          p=tarea.tarea
+          .acciones(data-id-tarea=`${tarea.id}`)
+            if(tarea.estado)
               i.far.fa-check-circle.completo
             else
               i.far.fa-check-circle

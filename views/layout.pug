@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 html(lang="es")
-	head
-		include partials/header
+	include includes/head
 	body
 		header.barra
 			h1 
@@ -11,14 +10,14 @@ html(lang="es")
 		main.contenedor
 			aside.contenedor-proyectos
 				.panel.crear-proyecto
-					a(href="/nuevo-proyecto" class="boton") Nuevo proyecto
+					a(href="/proyectos/nuevo" class="boton") Nuevo proyecto
 						span +
 				.panel.lista-proyectos
 					h2 Proyectos
+					-var projects = proyectos || []
 					include mixins/listadoProyectos
-					if proyectos
-						+listadoProyectos(proyectos)
+					+listadoProyectos(projects)
 
 			block contenido
 
-		script(src="/dist/bundle.js")
+		include includes/scriptsJs

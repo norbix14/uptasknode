@@ -31,6 +31,20 @@ exports.usuarioAutenticado = (req, res, next) => {
 }
 
 /**
+ * Middleware que revisa si el usuario esta autenticado o no
+ * 
+ * @param {object} req - user request
+ * @param {object} res - server response
+ * @param {Function} next - function to continue with the next middleware
+*/
+/*
+exports.verificarAutenticacion = (req, res, next) => {
+	if(!req.isAuthenticated()) return next()
+	return res.redirect('/')
+}
+*/
+
+/**
  * Funcion que cierra y destruye la sesion
  * 
  * @param {object} req - user request

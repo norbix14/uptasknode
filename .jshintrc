@@ -1,0 +1,12 @@
+{
+  "asi": true,
+  "browser": true,
+  "eqeqeq": true,
+  "esversion": 9,
+  "indent": 2,
+  "latedef": false,
+  "node": true,
+  "undef": true,
+  "unused": true,
+  "varstmt": true
+}
