@@ -1,0 +1,7 @@
+mixin alerts(messages = {})
+	if (Object.keys(messages).length > 0)
+		.alertas
+			each category in Object.keys(messages)
+				each error in messages[category]
+					div(class=`alerta ${category}`)
+						p=error

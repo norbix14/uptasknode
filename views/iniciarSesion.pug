@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 html(lang="es")
-	head
-		include partials/header
+	include includes/head
 	body.login
 		.contenedor-formulario
 			include mixins/form
-			+form('login', locals)
+			-var messages = mensajes || {}
+			+form('login', messages)

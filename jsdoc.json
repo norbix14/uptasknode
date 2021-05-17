@@ -10,14 +10,15 @@
   "source": {
     "exclude": [
       "node_modules",
-      "public",
       "docs"
     ],
     "include": [
       "config",
       "controllers",
+      "handlers",
       "helpers",
       "models",
+      "public/js",
       "routes"
     ],
     "excludePattern": "(^|\\/|\\\\)_",

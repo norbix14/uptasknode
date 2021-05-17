@@ -1,11 +1,12 @@
 extends layout
+
 block contenido
-  .notfound
-    h1 404 - Página no encontrada
-    h2 Lo sentimos. Contenido no disponible
-    if locals.environment === 'development'
-      .deverror
-        pre
-          p= `${locals.environment} mode error`
-          p= locals.message
-          p= locals.error
+	.notfound
+		h1 Página no encontrada
+		h2 Contenido no disponible
+		if (locals && locals.environment === 'development')
+			.deverror
+				pre
+					p=`${locals.environment} mode error`
+					p=locals.message
+					p=locals.error

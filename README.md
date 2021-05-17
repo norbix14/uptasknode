@@ -37,18 +37,15 @@ Ejecutar la App en modo de desarrollo/produccion
 
 **Variables de entorno**
 
-Para la base de datos en **Mysql**
-
+		# Para la base de datos en Mysql
 		BD_NOMBRE=""
 		BD_USER=""
 		BD_PASS=""
 		BD_HOST="
 		BD_PORT=""
 
-Host local para el proyecto
-
+		# Host local para el proyecto
 		HOST=""
 
-Sesion
-
+		# Sesion key
 		SESSION=""

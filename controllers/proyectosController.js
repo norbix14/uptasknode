@@ -15,7 +15,9 @@ const Tareas = require('../models/Tareas')
  * @param {object} res - server response
 */
 exports.proyectosHome = async (req, res) => {
-	const usuarioId = res.locals?.usuario?.id
+	const { locals = {} } = res
+	const { usuario = {} } = locals
+	const { id: usuarioId } = usuario
 	let proyectos = []
 	try {
 		proyectos = await Proyectos.findAll({
@@ -43,7 +45,9 @@ exports.proyectosHome = async (req, res) => {
  * @param {object} res - server response
 */
 exports.formularioProyecto = async (req, res) => {
-	const usuarioId = res.locals?.usuario?.id
+	const { locals = {} } = res
+	const { usuario = {} } = locals
+	const { id: usuarioId } = usuario
 	let proyectos = []
 	try {
 		proyectos = await Proyectos.findAll({
@@ -72,14 +76,17 @@ exports.formularioProyecto = async (req, res) => {
 */
 exports.nuevoProyecto = async (req, res) => {
 	try {
+		const { body } = req
+		const { locals = {} } = res
+		const { usuario = {} } = locals
+		const { id: usuarioId } = usuario
 		const errores = []
-		const usuarioId = res.locals?.usuario?.id
 		const proyectos = await Proyectos.findAll({
 			where: {
 				usuarioId
 			}
 		})
-		const { nombre } = req.body
+		const { nombre } = body
 		if (!nombre) {
 			errores.push({
 				texto: 'Agregar nombre al proyecto'
@@ -109,8 +116,11 @@ exports.nuevoProyecto = async (req, res) => {
 */
 exports.proyectoPorUrl = async (req, res, next) => {
 	try {
-		const usuarioId = res.locals?.usuario?.id
-		const { url } = req.params
+		const { params } = req
+		const { locals = {} } = res
+		const { usuario = {} } = locals
+		const { id: usuarioId } = usuario
+		const { url } = params
 		const proyectosPromise = Proyectos.findAll({
 			where: {
 				usuarioId
@@ -122,7 +132,13 @@ exports.proyectoPorUrl = async (req, res, next) => {
 				usuarioId
 			}
 		})
-		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		const [
+			proyectos,
+			proyecto
+		] = await Promise.all([
+			proyectosPromise,
+			proyectoPromise
+		])
 		const tareas = await Tareas.findAll({
 			where: {
 				proyectoId: proyecto.id
@@ -148,8 +164,11 @@ exports.proyectoPorUrl = async (req, res, next) => {
 */
 exports.formularioEditar = async (req, res) => {
 	try {
-		const usuarioId = res.locals?.usuario?.id
-		const { id } = req.params
+		const { params } = req
+		const { locals = {} } = res
+		const { usuario = {} } = locals
+		const { id: usuarioId } = usuario
+		const { id } = params
 		const proyectosPromise = Proyectos.findAll({
 			where: {
 				usuarioId
@@ -161,7 +180,13 @@ exports.formularioEditar = async (req, res) => {
 				usuarioId
 			}
 		})
-		const [ proyectos, proyecto ] = await Promise.all([proyectosPromise, proyectoPromise])
+		const [
+			proyectos,
+			proyecto
+		] = await Promise.all([
+			proyectosPromise,
+			proyectoPromise
+		])
 		return res.render('nuevoProyecto', {
 			nombrePagina: 'Editar proyecto',
 			proyectos,
@@ -179,9 +204,12 @@ exports.formularioEditar = async (req, res) => {
 */
 exports.actualizarProyecto = async (req, res) => {
 	try {
+		const { params } = req
+		const { locals = {} } = res
+		const { usuario = {} } = locals
+		const { id: usuarioId } = usuario
+		const { id } = params
 		const errores = []
-		const usuarioId = res.locals?.usuario?.id
-		const { id } = req.params
 		const proyectos = await Proyectos.findAll({
 			where: {
 				usuarioId
@@ -227,8 +255,11 @@ exports.actualizarProyecto = async (req, res) => {
 */
 exports.eliminarProyecto = async (req, res, next) => {
 	try {
-		const usuarioId = res.locals?.usuario?.id
-		const { urlProyecto } = req.query
+		const { query } = req
+		const { locals = {} } = res
+		const { usuario = {} } = locals
+		const { id: usuarioId } = usuario
+		const { urlProyecto } = query
 		const proyecto = await Proyectos.findOne({
 			where: {
 				url: urlProyecto,

@@ -1,38 +1,41 @@
 extends layout
+
 block contenido
+	-var project_url = proyecto.url || ''
+	-var project_id = proyecto.id || ''
+	-var tasks =  tareas || []
+
 	.contenido-principal
-
 		h1 #{nombrePagina} - #{proyecto.nombre}
-
-		form(class="agregar-tarea" 
-				 method="post" 
-				 action=`/proyectos/${proyecto.url}`)
+		form(class="agregar-tarea"
+		     method="post" 
+		     action=`/proyectos/${project_url}`)
 			.campo
 				label(for="tarea") Tarea:
 				input(type="text" 
-							class="nombre-tarea" 
-							name="tarea" 
-			 		  	placeholder="Nombre de la tarea" 
-			 		  	required)
+				  class="nombre-tarea" 
+					name="tarea" 
+					placeholder="Nombre de la tarea" 
+					required)
 			.campo.enviar
 				input(class="boton nueva-tarea" 
-							type="submit" 
-							value="Agregar")
+					type="submit"
+					value="Agregar")
 
 		.listado-pendientes
 			include mixins/listadoTareas
-			if tareas
-				+listadoTareas(tareas)
+			+listadoTareas(tasks)
 
-		if tareas.length
+		if (tasks.length > 0)
 			.avance
 				h2 Avance del proyecto
-				div#barra-avance.barra-avance
-					div#porcentaje.porcentaje
+				div(id="barra-avance" class="barra-avance")
+					div(id="porcentaje" class="porcentaje")
 
 		.contenedor-acciones
-			a(href=`/proyecto/editar/${proyecto.id}` class="boton") Editar
+			a(href=`/proyectos/editar/${project_id}`
+			  class="boton") Editar
 			button(type="button" 
-						 class="boton eliminar" 
-						 id="eliminar-proyecto"
-				   	 data-proyecto-url=`${proyecto.url}`) Eliminar
+				class="boton eliminar"
+				id="eliminar-proyecto"
+				data-proyecto-url=`${project_url}`) Eliminar

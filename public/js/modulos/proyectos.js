@@ -1,31 +1,30 @@
-import axios from 'axios'
 import { SwalDelete, Toast } from '../funciones/SweetAlert'
+import { deleteProject } from '../funciones/projectsHandler'
 
-const btnDeleteProject = document.querySelector('#eliminar-proyecto')
+const btnDelete = document.querySelector('#eliminar-proyecto')
 
-if(btnDeleteProject) {
-	btnDeleteProject.addEventListener('click', e => {
-		const urlProyecto = e.target.dataset.proyectoUrl
-		SwalDelete(() => {
-			const url = `${location.origin}/proyectos/${urlProyecto}`
-			axios.delete(url, {
-				params: {
-					urlProyecto
+if(btnDelete) {
+	btnDelete.addEventListener('click', (e) => {
+		const { origin } = window.location
+		const { target } = e
+		const { dataset = {} } = target
+		const { proyectoUrl = '' } = dataset
+		SwalDelete(async () => {
+			try {
+				const {
+					status,
+					data
+				} = await deleteProject(origin, proyectoUrl)
+				if (status !== 200) {
+					return Toast('warning', data)
 				}
-			})
-			.then(res => {
-				if (res.status === 200) {
-					Toast('success', res.data)
-					setTimeout(() => window.location.href = '/', 2500)
-				} else {
-					Toast('warning', res.data)
-				}
-			})
-			.catch(err => {
-				Toast('error', 'Ha ocurrido un error')
-			})
+				Toast('success', data)
+				setTimeout(() => window.location.href = '/', 2500)
+			} catch (error) {
+				return Toast('error', 'Ha ocurrido un error')
+			}
 		})
 	})
 }
 
-export default btnDeleteProject
+export default btnDelete

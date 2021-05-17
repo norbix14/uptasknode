@@ -1,10 +1,12 @@
 extends layout
+
 block contenido
 	.contenido-principal
 		h1 #{nombrePagina}
-		if errores
+		if (errores)
 			each error in errores
 				.alerta.error
-					p= error.texto
+					p=error.texto
+		-var project = proyecto || []
 		include mixins/crearProyecto
-		+crearProyecto(proyecto)
+		+crearProyecto(project)
