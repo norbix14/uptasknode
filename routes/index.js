@@ -11,19 +11,19 @@ const app = express()
 
 /**
  * Modulo que contiene el enrutamiento de la aplicacion
- * 
+ *
  * @module routes/index
-*/
+ */
 
 /**
  * Maneja las rutas de la aplicacion
-*/
+ */
 module.exports = function () {
-	app.use('/', home())
-	app.use('/crear-cuenta', signup())
-	app.use('/iniciar-sesion', login())
-	app.use('/cerrar-sesion', logout())
-	app.use('/proyectos', projects())
-	app.use('/tareas', tasks())
-	return app
+  app.use('/', home())
+  app.use('/crear-cuenta', signup())
+  app.use('/iniciar-sesion', login())
+  app.use('/cerrar-sesion', logout())
+  app.use('/proyectos', projects())
+  app.use('/tareas', tasks())
+  return app
 }
