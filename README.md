@@ -39,6 +39,7 @@ npm i
 Ejecuta `concurrently` junto a `npm run dev` y `npm run webpackdevmode` en paralelo.
 
 `npm run dev` = `nodemon ./index.js`
+
 `npm run webpackdevmode` = `webpack --watch --mode development`
 
 ```shell
@@ -48,6 +49,7 @@ npm run development
 Ejecuta `concurrently` junto a `npm run dev` y `npm run webpackprodmode` en paralelo.
 
 `npm run dev` = `nodemon ./index.js`
+
 `npm run webpackprodmode` = `webpack --watch --mode production`
 
 ```shell
