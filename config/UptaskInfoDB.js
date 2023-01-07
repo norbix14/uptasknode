@@ -9,7 +9,7 @@ require('dotenv').config()
  */
 
 module.exports = {
-  database: process.env.BD_NOMBRE,
+  database: process.env.BD_NAME,
   user: process.env.BD_USER,
   password: process.env.BD_PASS,
   host: process.env.BD_HOST,
